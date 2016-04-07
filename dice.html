@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+div.dice{
+	float:left;
+	width:40px;
+	height:40px;
+	background:lightgrey;
+	border:#999 1px solid;
+	padding:10px;
+	font-size:30px;
+	text-align:center;
+	margin:5px;
+}
+</style>
+<script>
+var frequency = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var prmpt;
+function Ask(){
+do{
+    prmpt = parseInt(window.prompt("Please enter how many times you want to roll the dice", "from 50 to 100"));
+}while(isNaN(prmpt) || prmpt > 100 || prmpt < 50);
+var counter = 0;
+rollDice(counter, prmpt)
+};
+function rollDice(counter, Loops){
+setTimeout(function () {
+    if (counter >= Loops) {
+	this.CrtTable();
+	return;
+	}
+	var die1 = document.getElementById("die1");
+    var die2 = document.getElementById("die2");
+    var status = document.getElementById("status");
+    var d1 = Math.floor(Math.random() * 6) + 1;
+    var d2 = Math.floor(Math.random() * 6) + 1;
+    var diceTotal = d1 + d2;
+	frequency[diceTotal-2]++;
+    die1.innerHTML = d1;
+    die2.innerHTML = d2;
+    status.innerHTML = "You rolled "+diceTotal+".";
+	counter++;
+    rollDice(counter, Loops);
+	}, 500);
+};
+
+function CrtTable(){
+
+var table = document.createElement('table');
+table.style="cellpadding: 5px; border: 1px solid black; cellspacing:2px;";
+
+	var tr = document.createElement('tr');   
+
+    var td1 = document.createElement('td');
+    var td2 = document.createElement('td');
+	var td3 = document.createElement('td');
+	td1.style="width: 100px; height: 15px; border: 1px solid black; padding:5px";
+	td2.style="width: 100px; height: 15px; border: 1px solid black; padding:5px";
+	td3.style="width: 100px; height: 15px; border: 1px solid black; padding:5px";
+
+    var he1 = document.createTextNode("Value Rolled");
+	var he2 = document.createTextNode("Frequency");
+	var he3 = document.createTextNode("Percentage");
+
+    td1.appendChild(he1);
+    td2.appendChild(he2);
+	td3.appendChild(he3);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+	tr.appendChild(td3);
+	
+	table.appendChild(tr);
+
+for (var i = 0; i < frequency.length; i++){
+	var perc = Math.round((frequency[i] / prmpt) * 100);
+    tr = document.createElement('tr');   
+
+    td1 = document.createElement('td');
+    td2 = document.createElement('td');
+	td3 = document.createElement('td');
+	td1.style="width: 100px; height: 15px; border: 1px solid black; padding:5px";
+	td2.style="width: 100px; height: 15px; border: 1px solid black; padding:5px";
+	td3.style="width: 100px; height: 15px; border: 1px solid black; padding:5px";
+
+    var text1 = document.createTextNode(i+2);
+    var text2 = document.createTextNode(frequency[i]);
+	var text3 = document.createTextNode(perc + "%");
+
+    td1.appendChild(text1);
+    td2.appendChild(text2);
+	td3.appendChild(text3);
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+	tr.appendChild(td3);
+
+    table.appendChild(tr);
+}
+document.body.appendChild(table);
+}
+
+</script>
+</head>
+<body onload="Ask()">
+<div id="die1" class="dice">0</div>
+<div id="die2" class="dice">0</div>
+<h2 id="status" style="clear:left;"></h2>
+</body>
+</html>
